@@ -3,6 +3,7 @@ services:
 
   backend:
     build: ./app
+    restart: unless-stopped
     command: ["/app/tools/run.sh"]
     volumes:
       - static_volume:/app/staticfiles
@@ -21,20 +22,31 @@ services:
 
   nginx:
     build: ./nginx
+    restart: unless-stopped
     volumes:
       - /home/ubuntu/logs:/var/logs
-      - /home/ubuntu/certs:/etc/nginx/certs
+      - /home/ubuntu/doccano/certbot/conf:/etc/letsencrypt
+      - /home/ubuntu/doccano/certbot/www:/var/www/certbot
       - www:/var/www/html:ro
       - static_volume:/static
       - /home/ubuntu/doccano/nginx/nginx.conf:/etc/nginx/nginx.conf
     env_file:
       - .env
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     ports:
       - ${NGINX_PORT}:${NGINX_PORT}
     depends_on:
       - backend
     networks:
       - network-frontend
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - /home/ubuntu/doccano/certbot/conf:/etc/letsencrypt
+      - /home/ubuntu/doccano/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
   static_volume:
