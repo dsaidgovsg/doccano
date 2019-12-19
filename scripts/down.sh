@@ -1,3 +1,3 @@
 export $(grep -v '^#' .env | xargs)
 
-docker-compose down
+docker-compose down --remove-orphans
