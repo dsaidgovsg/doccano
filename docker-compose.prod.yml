@@ -19,6 +19,8 @@ services:
     build: ./frontend
     volumes:
       - www:/app/dist
+    env_file:
+      - .env
 
   nginx:
     build: ./nginx
