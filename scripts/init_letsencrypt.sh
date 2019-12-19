@@ -7,7 +7,7 @@ fi
 
 export $(grep -v '^#' .env | xargs)
 
-domains=("$DOMAIN1" "$DOMAIN2")
+domains=("$DOMAIN1")
 rsa_key_size=4096
 data_path="$DATA_PATH"
 email="" # Adding a valid address is strongly recommended
