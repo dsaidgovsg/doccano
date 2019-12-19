@@ -34,7 +34,8 @@ services:
       - .env
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     ports:
-      - ${NGINX_PORT}:${NGINX_PORT}
+      - ${NGINX_PORT1}:${NGINX_PORT1}
+      - ${NGINX_PORT2}:${NGINX_PORT2}
     depends_on:
       - backend
     networks:
