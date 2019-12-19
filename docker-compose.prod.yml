@@ -42,7 +42,7 @@ services:
       - network-frontend
 
   certbot:
-    image: certbot/certbot
+    image: certbot/certbot:v0.36.0
     restart: unless-stopped
     volumes:
       - /home/ubuntu/doccano/certbot/conf:/etc/letsencrypt
